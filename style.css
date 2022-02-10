@@ -1,0 +1,15 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    justify-content: center;
+}
+
+.game-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.game-body #score {
+    font-size: 140px;
+}
