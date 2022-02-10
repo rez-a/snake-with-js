@@ -17,3 +17,24 @@ snake.forEach(snakePart => {
     ctx.fillRect(snakePart.x, snakePart.y, 10, 10);
     ctx.strokeRect(snakePart.x, snakePart.y, 10, 10);
 })
+
+
+let randomNumber = (max, min) => Math.round((Math.random() * (max - min) + min) / 10) * 10;
+let foodX, foodY;
+
+let createFood = () => {
+    foodX = randomNumber(gameCanvas.width, 0);
+    foodY = randomNumber(gameCanvas.height, 0);
+    foodX === gameCanvas.width ? foodX -= 10 : foodX = foodX;
+    foodY === gameCanvas.width ? foodY -= 10 : foodY = foodY;
+    snake.forEach(snakePart => {
+        if (foodX === snakePart.x && foodY === snakePart.y) {
+            createFood();
+        }
+    })
+
+}
+createFood();
+ctx.fillStyle = 'red';
+ctx.fillRect(foodX, foodY, 10, 10);
+ctx.strokeRect(foodX, foodY, 10, 10);
