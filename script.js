@@ -2,6 +2,7 @@ const gameCanvas = document.querySelector('canvas');
 const scoreElm = document.querySelector('#score');
 let ctx = gameCanvas.getContext('2d');
 let foodX, foodY, head, score = 0,
+    interval,
     statusEvent = true;
 let direction = 'ArrowRight';
 let snake = [
@@ -14,7 +15,7 @@ let snake = [
 let randomNumber = (max, min) => Math.round((Math.random() * (max - min) + min) / 10) * 10;
 
 function main() {
-    let interval = setInterval(() => {
+    interval = setInterval(() => {
         clearCanvas();
         drawFood();
         moveSnake(direction);
@@ -51,37 +52,6 @@ let drawSnake = () => {
         ctx.fillRect(snakePart.x, snakePart.y, 10, 10);
         ctx.strokeRect(snakePart.x, snakePart.y, 10, 10);
     })
-    if (head.x === foodX && head.y === foodY) {
-        score += 10;
-        scoreElm.textContent = score;
-        createFood();
-        drawFood();
-        let newSectionSnakeX;
-        let newSectionSnakeY;
-        let newSectionSnake;
-        switch (direction) {
-            case 'ArrowUp':
-                newSectionSnakeX = snake[snake.length - 1].x + 0;
-                newSectionSnakeY = snake[snake.length - 1].y + 10;
-                break;
-            case 'ArrowDown':
-                newSectionSnakeX = snake[snake.length - 1].x + 0;
-                newSectionSnakeY = snake[snake.length - 1].y - 10;
-                break;
-            case 'ArrowRight':
-                newSectionSnakeX = snake[snake.length - 1].x - 10;
-                newSectionSnakeY = snake[snake.length - 1].y + 0;
-                break;
-            case 'ArrowLeft':
-                newSectionSnakeX = snake[snake.length - 1].x + 10;
-                newSectionSnakeY = snake[snake.length - 1].y + 0;
-                break;
-            default:
-                break;
-        };
-        newSectionSnake = { x: newSectionSnakeX, y: newSectionSnakeY }
-        snake.push(newSectionSnake);
-    }
 }
 let moveSnake = (direction) => {
     switch (direction) {
@@ -109,7 +79,21 @@ let moveSnake = (direction) => {
 
 
     snake.unshift(head);
-    snake.pop();
+    if (head.x === foodX && head.y === foodY) {
+        score += 10;
+        scoreElm.textContent = score;
+        createFood()
+    } else {
+        snake.pop();
+    }
+
+    for (let index = 1; index <= snake.length - 1; index++) {
+        if (head.x === snake[index].x && head.y === snake[index].y) {
+            clearInterval(interval);
+            scoreElm.textContent = 'Game Over';
+        }
+    }
+
 }
 main();
 document.addEventListener('keydown', function(e) {
